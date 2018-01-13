@@ -2,21 +2,29 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
+	"golang.org/x/net/html"
 )
 
 func main() {
-	fmt.Println("Hey")
+
 	resp, err := http.Get("https://www.fusion-conferences.com")
 	if err != nil {
 		log.Fatalln("Could not fetch URL")
 	}
 	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatalln("Could not read body")
+
+	z := html.NewTokenizer(resp.Body)
+
+	for {
+		tt := z.Next();
+		if tt == html.ErrorToken {
+			return
+		} else if tt == html.StartTagToken {
+			t := z.Token()
+			fmt.Println(t.String()+"\n")
+		}
 	}
-	fmt.Println(string(body))
+
 }
