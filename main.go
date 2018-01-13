@@ -28,7 +28,7 @@ func crawlPage(url string) {
 		tt := z.Next()
 
 		if tt == html.ErrorToken {
-			return
+			break
 		} else if tt == html.StartTagToken {
 			t := z.Token()
 
@@ -68,7 +68,7 @@ func main() {
 		tt := z.Next()
 
 		if tt == html.ErrorToken {
-			return
+			break
 		} else if tt == html.StartTagToken {
 			t := z.Token()
 
