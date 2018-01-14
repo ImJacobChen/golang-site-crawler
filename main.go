@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"strings"
 	"sync"
 
 	"golang.org/x/net/html"
@@ -31,39 +30,53 @@ func crawlPage(url string) {
 			break
 		}
 
+		// if tt == html.StartTagToken {
+		// 	t := z.Token()
+
+		// 	isAnchor := t.Data == "a"
+		// 	if isAnchor {
+		// 		// Loop over anchor attributes and
+		// 		// if there is a 'href' then Print
+		// 		// the value.
+		// 		for _, a := range t.Attr {
+		// 			if a.Key == "href" {
+		// 				fmt.Println("Found link!: ", a.Val)
+		// 				fmt.Println(z.Text())
+		// 				links = append(links, a.Val)
+		// 				wg.Add(1)
+		// 				go crawlPage(a.Val)
+		// 				break
+		// 			}
+		// 		}
+		// 	}
+		// }
+
 		if tt == html.StartTagToken {
 			t := z.Token()
-
-			isAnchor := t.Data == "a"
-			if isAnchor {
-				// Loop over anchor attributes and
-				// if there is a 'href' then Print
-				// the value.
-				for _, a := range t.Attr {
-					if a.Key == "href" {
-						fmt.Println("Found link!: ", a.Val)
-						fmt.Println(z.Text())
-						links = append(links, a.Val)
-						wg.Add(1)
-						go crawlPage(a.Val)
-						break
-					}
+			if t.Data == "title" {
+				tokenType := z.Next()
+				if tokenType == html.TextToken {
+					titleToken := z.Token()
+					fmt.Println("Found title: ", titleToken.String())
 				}
+
 			}
+
 		}
 
-		if tt == html.TextToken {
-			fmt.Println(strings.TrimSpace(string(z.Raw())))
-			fmt.Println(strings.TrimSpace(string(z.Text())))
-		}
+		// if tt == html.TextToken {
+		// 	token := z.Token()
+
+		// 	fmt.Println("Title = ", token.Data)
+		// }
 	}
 
-	wg.Done()
+	//wg.Done()
 }
 
 func main() {
 
 	crawlPage("https://www.fusion-conferences.com")
 
-	wg.Wait()
+	//wg.Wait()
 }
