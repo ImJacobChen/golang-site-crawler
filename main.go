@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strings"
 	"sync"
 
 	"golang.org/x/net/html"
@@ -28,7 +29,9 @@ func crawlPage(url string) {
 
 		if tt == html.ErrorToken {
 			break
-		} else if tt == html.StartTagToken {
+		}
+
+		if tt == html.StartTagToken {
 			t := z.Token()
 
 			isAnchor := t.Data == "a"
@@ -39,6 +42,7 @@ func crawlPage(url string) {
 				for _, a := range t.Attr {
 					if a.Key == "href" {
 						fmt.Println("Found link!: ", a.Val)
+						fmt.Println(z.Text())
 						links = append(links, a.Val)
 						wg.Add(1)
 						go crawlPage(a.Val)
@@ -46,6 +50,11 @@ func crawlPage(url string) {
 					}
 				}
 			}
+		}
+
+		if tt == html.TextToken {
+			fmt.Println(strings.TrimSpace(string(z.Raw())))
+			fmt.Println(strings.TrimSpace(string(z.Text())))
 		}
 	}
 
