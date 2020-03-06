@@ -58,24 +58,24 @@ func crawlPage(url string) {
 			}
 		}
 
-		// if tt == html.StartTagToken {
-		// 	t := z.Token()
-		// 	if t.Data == "title" {
-		// 		tokenType := z.Next()
-		// 		if tokenType == html.TextToken {
-		// 			titleToken := z.Token()
-		// 			fmt.Println("Found title: ", titleToken.String())
-		// 		}
+		if tt == html.StartTagToken {
+			t := z.Token()
+		 	if t.Data == "title" {
+		 		tokenType := z.Next()
+		 		if tokenType == html.TextToken {
+		 			titleToken := z.Token()
+		 			fmt.Println("Found title: ", titleToken.String())
+		 		}
 
-		// 	}
+		 	}
 
-		// }
+		}
 
-		// if tt == html.TextToken {
-		// 	token := z.Token()
+		if tt == html.TextToken {
+	 		token := z.Token()
 
-		// 	fmt.Println("Title = ", token.Data)
-		// }
+		 	fmt.Println("Title = ", token.Data)
+		}
 	}
 
 	wg.Done()
