@@ -46,7 +46,7 @@ func crawlPage(url string) {
 				// the value.
 				for _, a := range t.Attr {
 					if a.Key == "href" {
-						//fmt.Println("Found link!: ", a.Val)
+						fmt.Println("Found link!: ", a.Val)
 						links = append(links, a.Val)
 						if pageShouldBeCrawled(a.Val) {
 							wg.Add(1)
